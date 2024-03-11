@@ -46,7 +46,7 @@ class CategoryController extends Controller
     //show
     public function show($id)
     {
-        return view("pages.dashboar");
+        return view("pages.category.show");
     }
 
     //edit

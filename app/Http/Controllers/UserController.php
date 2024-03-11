@@ -47,7 +47,7 @@ class UserController extends Controller
     //show
     public function show($id)
     {
-        return view("pages.dashboar");
+        return view("pages.user.show");
     }
 
     //edit
@@ -60,16 +60,33 @@ class UserController extends Controller
     //update
     public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $user = User::findOrFail($id);
-        // check if password is empty
-        if($request->input('password')){
-            $data['password'] = Hash::make($request->input('password'));
-        } else {
-            $data['password'] = $user->password;
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'. $id,
+            'role' => 'required|in:admin,staff,user',
+        ]);
+        // $data = $request->all();
+        // $user = User::findOrFail($id);
+        // // check if password is empty
+        // if($request->input('password')){
+        //     $data['password'] = Hash::make($request->input('password'));
+        // } else {
+        //     $data['password'] = $user->password;
+        // }
+
+        // $user->update($data);
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->role;
+        $user->save();
+
+        //if password not empty
+        if($request->password){
+            $user->password = Hash::make($request->password);
+            $user->save();
         }
 
-        $user->update($data);
         return redirect()->route('user.index');
     }
 
