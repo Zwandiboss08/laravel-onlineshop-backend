@@ -17,10 +17,16 @@ class UserController extends Controller
         //     ->where('name', 'like', '%' . $request->search . '%')->paginate(10);
 
         //get user with pagination with when
+        // $users = DB::table('users')
+        // ->when($request->input('name'), function ($query, $name){
+        //     return $query->where('name', 'like', '%' . $name . '%');
+        // } )->paginate(10);
+
+        // get all users with pagination, filter name and email
         $users = DB::table('users')
         ->when($request->input('name'), function ($query, $name){
-            return $query->where('name', 'like', '%' . $name . '%');
-        } )->paginate(10);
+            $query->where('name', 'like' ,'%'.$name.'%')->orWhere('email', 'like' ,'%'.$name.'%');}
+        )->paginate(10);
         return view('pages.user.index', compact('users'));
     }
     //create
