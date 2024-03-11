@@ -62,8 +62,9 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'. $id,
-            'role' => 'required|in:admin,staff,user',
+            'email' => 'required',
+            'phone' => 'required',
+            'roles' => 'required|in:ADMIN,STAFF,USER',
         ]);
         // $data = $request->all();
         // $user = User::findOrFail($id);
@@ -78,7 +79,8 @@ class UserController extends Controller
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->role = $request->role;
+        $user->phone = $request->phone;
+        $user->roles = $request->roles;
         $user->save();
 
         //if password not empty
