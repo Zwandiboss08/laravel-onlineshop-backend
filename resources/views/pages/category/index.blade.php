@@ -22,23 +22,25 @@
                 </div>
             </div>
             <div class="section-body">
-                {{-- <div class="row">
+                <div class="row">
                     <div class="col-12">
                         @include('layouts.alert')
                     </div>
-                </div> --}}
-
+                </div>
 
 
                 <div class="row mt-4">
                     <div class="col-12">
                         <div class="card">
+                            <div class="card-header">
+                                <h4>All category</h4>
+                            </div>
                             <div class="card-body">
+
                                 <div class="float-right">
-                                    <form method="GET" action="{{ route('user.index') }}">
+                                    <form method="GET" action="{{ route('category.index') }}">
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search" name="name"> {{-- pagination pakai when, sesuaikan dengan input nya, kalau where pakai "search"}}
-                                            {{-- <input type="text" class="form-control" placeholder="Search" name="search"> --}}
+                                            <input type="text" class="form-control" placeholder="Search" name="name">
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary"><i class="fas fa-search"></i></button>
                                             </div>
@@ -53,7 +55,8 @@
                                         <tr>
 
                                             <th>Name</th>
-                                            <th>Created At</th>
+
+                                            <th>Create At</th>
                                             <th>Action</th>
                                         </tr>
                                         @foreach ($categories as $category)
@@ -71,8 +74,8 @@
                                                             Edit
                                                         </a>
 
-                                                        <form action="{{ route('category.destroy', $category->id) }}" method="POST"
-                                                            class="ml-2">
+                                                        <form action="{{ route('category.destroy', $category->id) }}"
+                                                            method="POST" class="ml-2">
                                                             <input type="hidden" name="_method" value="DELETE" />
                                                             <input type="hidden" name="_token"
                                                                 value="{{ csrf_token() }}" />

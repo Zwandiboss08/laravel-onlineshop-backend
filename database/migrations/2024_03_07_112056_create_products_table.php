@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('stock');
             $table->boolean('is_available')->default(true);
+            $table->boolean('is_favorite')->default(true);
             $table->timestamps();
         });
     }

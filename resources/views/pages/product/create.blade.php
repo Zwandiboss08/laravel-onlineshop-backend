@@ -114,6 +114,33 @@
                                 @enderror
                             </div>
 
+                            <div class="form-group">
+                                <label class="form-label w-100">Status</label>
+                                <div class="selectgroup selectgroup-pills">
+                                    <label class="selectgroup-item">
+                                        <input type="radio" name="is_available" value="1" class="selectgroup-input" checked="">
+                                        <span class="selectgroup-button">Active</span>
+                                    </label>
+                                    <label class="selectgroup-item">
+                                        <input type="radio" name="is_available" value="0" class="selectgroup-input">
+                                        <span class="selectgroup-button">Inactive</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label w-100">Is Favorite</label>
+                                <div class="selectgroup selectgroup-pills">
+                                    <label class="selectgroup-item">
+                                        <input type="radio" name="is_favorite" value="1" class="selectgroup-input" checked="">
+                                        <span class="selectgroup-button">Yes</span>
+                                    </label>
+                                    <label class="selectgroup-item">
+                                        <input type="radio" name="is_favorite" value="0" class="selectgroup-input">
+                                        <span class="selectgroup-button">No</span>
+                                    </label>
+                                </div>
+                            </div>
 
                         </div>
                         <div class="card-footer text-right">

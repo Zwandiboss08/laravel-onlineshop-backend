@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use \App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -20,19 +22,114 @@ class ProductController extends Controller
 
     //store
     public function store(Request $request){
-        $filename = time() . '.' . $request->image->extension();
-        $request->image->storeAs('public/products', $filename);
-        // $data = $request->all();
+        //validate the request
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required|numeric',
+            'category_id' => 'required',
+            'stock' => 'required|numeric',
+            'is_available' => 'required|boolean',
+            'is_favorite' => 'required|boolean',
+        ]);
 
-        $product = new \App\Models\Product;
+        //store request
+        $product = new Product;
         $product->name = $request->name;
         $product->description = $request->description;
-        $product->price = (int) $request->price;
-        $product->stock = (int) $request->stock;
+        $product->price = $request->price;
         $product->category_id = $request->category_id;
-        $product->image = $filename;
+        $product->stock = $request->stock;
+        $product->is_available = $request->is_available;
+        $product->is_favorite = $request->is_favorite;
+
         $product->save();
 
-        return redirect()->route('product.index');
+        //save image
+        if($request->hasFile('image')){
+            $image = $request->file('image');
+            $image->storeAs('public/products', $product->id . '.' . $image->getClientOriginalExtension());
+            $product->image = 'storage/products/' . $product->id . '.' . $image->getClientOriginalExtension();
+            $product->save();
+        }
+        return redirect()->route('product.index')->with('success', 'Product created successfully');
+
+
+        //yg di bawah juga bisa
+        // $filename = time() . '.' . $request->image->extension();
+        // $request->image->storeAs('public/products', $filename);
+        // // $data = $request->all();
+
+        // $product = new \App\Models\Product;
+        // $product->name = $request->name;
+        // $product->description = $request->description;
+        // $product->price = (int) $request->price;
+        // $product->stock = (int) $request->stock;
+        // $product->category_id = $request->category_id;
+        // $product->image = $filename;
+        // $product->save();
+
+        // return redirect()->route('product.index');
+    }
+
+
+    // show
+    public function show($id)
+    {
+        return view('pages.product.show');
+    }
+
+    // edit
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        $categories = DB::table('categories')->get();
+        return view('pages.product.edit', compact('product', 'categories'));
+    }
+
+    // update
+    public function update(Request $request, $id)
+    {
+        // validate the request...
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required|numeric',
+            'category_id' => 'required',
+            'stock' => 'required|numeric',
+            'is_available' => 'required|boolean',
+            'is_favorite' => 'required|boolean',
+        ]);
+
+        // update the request...
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->price = $request->price;
+        $product->category_id = $request->category_id;
+        $product->stock = $request->stock;
+        $product->is_available = $request->is_available;
+        $product->is_favorite = $request->is_favorite;
+        $product->save();
+
+        //save image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image->storeAs('public/products', $product->id . '.' . $image->getClientOriginalExtension());
+            $product->image = 'storage/products/' . $product->id . '.' . $image->getClientOriginalExtension();
+            $product->save();
+        }
+
+        return redirect()->route('product.index')->with('success', 'Product updated successfully');
+    }
+
+    // destroy
+    public function destroy($id)
+    {
+        // delete the request...
+        $product = Product::find($id);
+        $product->delete();
+
+        return redirect()->route('product.index')->with('success', 'Product deleted successfully');
     }
 }

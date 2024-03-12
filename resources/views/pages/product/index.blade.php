@@ -22,11 +22,11 @@
                 </div>
             </div>
             <div class="section-body">
-                {{-- <div class="row">
+                <div class="row">
                     <div class="col-12">
                         @include('layouts.alert')
                     </div>
-                </div> --}}
+                </div>
 
 
 
@@ -54,8 +54,9 @@
 
                                             <th>Name</th>
                                             <th>Category</th>
-                                            <th>Name</th>
+                                            <th>Price</th>
                                             <th>Stock</th>
+                                            <th>Status</th>
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
@@ -70,7 +71,8 @@
                                                 </td>
                                                 <td>{{ $product->stock }}
                                                 </td>
-
+                                                <td>{{ $product->is_available == 1 ? 'Active' : 'Inactive' }}
+                                                </td>
                                                 <td>{{ $product->created_at }}</td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">

@@ -7,13 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 class CategoryController extends Controller
 {
-    // //index
-    // public function index(){
-    //     $categories = \App\Models\Category::paginate(5);
-    // return view('pages.category.index', compact('categories'));
-
-    // }
-
 
     //index
     public function index(Request $request)
@@ -38,9 +31,31 @@ class CategoryController extends Controller
     //store
     public function store(Request $request)
     {
-        $data = $request->all();
-        Category::create($data);
-        return redirect()->route('category.index');
+        // $data = $request->all();
+        // Category::create($data);
+        // return redirect()->route('category.index');
+
+        //validate the request...
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        //store the request...
+        $category = new Category;
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->save();
+
+        //save image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image->storeAs('public/categories', $category->id . '.' . $image->getClientOriginalExtension());
+            $category->image = 'storage/categories/' . $category->id . '.' . $image->getClientOriginalExtension();
+            $category->save();
+        }
+
+        return redirect()->route('category.index')->with('success', 'Category created successfully');
     }
 
     //show
@@ -59,11 +74,33 @@ class CategoryController extends Controller
     //update
     public function update(Request $request, $id)
     {
-        $data = $request->all();
-        $category = Category::findOrFail($id);
 
-        $category->update($data);
-        return redirect()->route('category.index');
+        //validate the request...
+        $request->validate([
+            'name' => 'required',
+            // 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        //update the request...
+        $category = Category::find($id);
+        $category->name = $request->name;
+        $category->description = $request->description;
+        $category->save();
+
+        //save image
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $image->storeAs('public/categories', $category->id . '.' . $image->getClientOriginalExtension());
+            $category->image = 'storage/categories/' . $category->id . '.' . $image->getClientOriginalExtension();
+            $category->save();
+        }
+
+        return redirect()->route('category.index')->with('success', 'Category updated successfully');
+        // $data = $request->all();
+        // $category = Category::findOrFail($id);
+
+        // $category->update($data);
+        // return redirect()->route('category.index');
     }
 
     //destroy
