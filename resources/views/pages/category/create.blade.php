@@ -29,7 +29,7 @@
 
 
                 <div class="card">
-                    <form action="{{ route('categories.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('category.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card-header">
                             <h4>Input Text</h4>
@@ -65,10 +65,8 @@
 
                             <div class="form-group">
                                 <label class="form-label">Photo Category</label>
-                                <div class="col-sm-9">
                                     <input type="file" class="form-control" name="image"
                                         @error('image') is-invalid @enderror>
-                                </div>
                                 @error('image')
                                     <div class="invalid-feedback">
                                         {{ $message }}
